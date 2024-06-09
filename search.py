@@ -5,11 +5,11 @@ import requests
 import tempfile
 from openai import OpenAI
 from dotenv import load_dotenv
-from os import getenv
+import os
 
 load_dotenv()
-ASSISTANT_ID=getenv("ASSISTANT_ID")
-VECTOR_STORE_ID=getenv("VECTOR_STORE_ID")
+ASSISTANT_ID=os.environ["ASSISTANT_ID"]
+VECTOR_STORE_ID=os.environ["VECTOR_STORE_ID"]
 
 def get_case_studies(ogurl : str, case_study_url: str):
     #Retrieve all links from the sitemap of the comapny website that starts with the case_study_url, i.e, return all the nested pages of the case studies page
@@ -102,7 +102,7 @@ def summarize(text):
     #Given a string of text content from the about page of a company, creates a brief summary of the company
 
 
-    client = OpenAI()
+    client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
     my_assistant = client.beta.assistants.create(
         instructions="You are a company goals summarizer",
         name="testing",
@@ -131,7 +131,7 @@ def summarize(text):
 def delete_previous_files_in_vs():
     # Delete all files present in the vector store
 
-    client = OpenAI()
+    client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
     vector_store_files = client.beta.vector_stores.files.list(
     vector_store_id=VECTOR_STORE_ID
     )
@@ -146,7 +146,7 @@ def delete_previous_files_in_vs():
 def add_files_to_vector_store(files):
     # Add a list of files to the vector database
 
-    client = OpenAI()
+    client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
 
     # Create client files
     client_files = []
@@ -192,7 +192,7 @@ def get_about_page(listoflinks):
     # Given a list of singly nested links return the one that is most likely to be of the about page
     # Can be /about, /who-we-are, /about-us, etc
 
-    client = OpenAI()
+    client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
     thread = client.beta.threads.create()
     run = client.beta.threads.runs.create_and_poll(
         thread_id=thread.id,
@@ -273,7 +273,7 @@ def extract_json_substring(text):
 def get_draft(summary):
     # Given a summary of the company (extracted from the about page), return the desired output (the comapny url, and the 3 points), using the vector store previously configured
 
-    client = OpenAI()
+    client = OpenAI(api_key=os.environ["OPENAI_API_KEY"])
     thread = client.beta.threads.create()
     run = client.beta.threads.runs.create_and_poll(
         thread_id=thread.id,
