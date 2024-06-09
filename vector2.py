@@ -71,38 +71,6 @@ def get_single_nested_links(sitemap_url):
     return single_nested_links
 
 
-def get_points(link):
-    client = OpenAI()
-    my_assistant = client.beta.assistants.create(
-        instructions="",
-        name="GRITAE2",
-        model="gpt-4o",
-    )
-    thread = client.beta.threads.create()
-    run = client.beta.threads.runs.create_and_poll(
-        thread_id=thread.id,
-        assistant_id=my_assistant.id,
-        model="gpt-4o",
-        instructions="You have been given HTML documents of case studies of projects done for different companies in the past."
-        "Provide the name of the company that corresponds to the most similar case study for the prospect www.loops.so, its details are provided in the files,"
-        "and also 3 reasons why that case study is worth going through by the prospect that is, how it could be beneficial for them."
-        " in json format only. " 
-        "Example output: {\"case_study\":\"Fundrise\", \"points\":[\"We have helped ABC do X more efficiently which also could benefit you because...\", \"We incorporated X into the ABC ecosystem... \", \" We helped ABC do this better, you could use it too.....\"]}"
-        )
-    if run.status == "completed":
-        messages = client.beta.threads.messages.list(
-            thread_id=thread.id,
-            run_id=run.id
-        )
-        text = messages.data[0].content[0].text.value
-        text = extract_json_substring(text)
-        text = re.sub(r'【.*?】', '', text)
-        text = text.replace("```json", "").replace("```","")
-        text = json.loads(text)
-        print(text)
-        return text
-
-
 def save_html_to_tempfile(url):
     try:
         response = requests.get(url)
