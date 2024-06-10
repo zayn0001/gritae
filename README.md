@@ -96,5 +96,5 @@ Start the server
 
 ## License
 
-[MIT](https://choosealicense.com/licenses/mit/)
+[MIT](https://github.com/zayn0001/gritae/blob/main/LICENSE)
 
