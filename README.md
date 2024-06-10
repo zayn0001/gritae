@@ -91,8 +91,7 @@ Start the server
 
 
 ## Screenshots
-
-![App Screenshot](https://github.com/zayn0001/gritae/sample.png)
+![App Screenshot](https://github.com/zayn0001/gritae/blob/main/sample.png)
 
 
 ## License
